@@ -15,23 +15,32 @@ jobs:
       - name: Build Test
         run: echo "Build Test"
         
-  changeApproval:
-    name: ServiceNow Change Approval
+  # changeApproval:
+  #   name: ServiceNow Change Approval
+  #   runs-on: ubuntu-latest
+  #   steps:     
+  #     - name: ServiceNow Change Approval
+  #       uses: ServiceNow/servicenow-devops-change@v4.0.0
+  #       id: create
+  #       with:
+  #         # Devops Integration Token
+  #         devops-integration-token: ${{ secrets.SN_DEVOPS_TOKEN }}
+  #         instance-url: ${{ secrets.SN_INSTANCE_URL }}
+  #         tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
+  #         context-github: ${{ toJSON(github) }}
+  #         job-name: 'ServiceNow Change Approval'
+  #         change-request: '{"attributes": {"short_description": "Automated Software Deployment"}}'
+  #         interval: '100'
+  #         timeout: '3600'
+  #         changeCreationTimeOut: '3600'
+  #         abortOnChangeCreationFailure: true
+  #         abortOnChangeStepTimeout: true
+  deploy:
+    needs: build
+    name: Deploy
     runs-on: ubuntu-latest
-    steps:     
-      - name: ServiceNow Change Approval
-        uses: ServiceNow/servicenow-devops-change@dev
-        id: create
-        with:
-          # Devops Integration Token
-          devops-integration-token: ${{ secrets.SN_DEVOPS_TOKEN }}
-          instance-url: ${{ secrets.SN_INSTANCE_NAME }}
-          tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
-          context-github: ${{ toJSON(github) }}
-          job-name: 'ServiceNow Change Approval'
-          change-request: '{"attributes": {"short_description": "Automated Software Deployment"}}'
-          interval: '100'
-          timeout: '3600'
-          changeCreationTimeOut: '3800'
-          abortOnChangeCreationFailure: true
-          abortOnChangeStepTimeout: true
+    environment: prod
+    steps:
+          
+        - name: Run deployment scripts
+          run: echo Completed Deployment
